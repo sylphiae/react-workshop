@@ -3,12 +3,48 @@ import ReactDOM from "react-dom";
 import serializeForm from "form-serialize";
 
 class App extends React.Component {
+  handleSubmit = event => {
+    event.preventDefault(); // prevent page refresh
+    const form = event.target;
+    const value = serializeForm(form, { hash: true});
+    console.log(values);
+  };
+
+  state = { firstName: "Jenny", lastName: "Tong"};
+
   render() {
+    // if the prop name begins with "default" or "initial" it sets the state on the first render, not afterwards
     return (
       <div>
         <h1>Forms</h1>
-        <form>
-          <input type="text" />
+        <input type="checkbox" 
+        defaultChecked = {true}
+        onChange={event => {
+        console.log(event.target.checked);
+      }}/>
+      
+        <p>
+          You entered: {this.state.firstName} {this.state.lastName}
+        </p>
+
+        <button
+          onClick={() => this.setState({ firstName: "Ginny" })}>
+          Set the first name to Ginny
+        </button>
+
+        <form onSubmit={this.handleSubmit}>
+          <input type="text" 
+          value={this.state.firstName}
+          name="firstName"
+          onChange={event =>
+          this.setState({ firstName: event.target.value })} 
+          />
+          <input type="text"
+          defaultValue={this.state.lastName}
+          onChange={event =>
+          this.setState({ lastname: event.target.value})}
+          name="lastName" 
+          />
         </form>
       </div>
     );

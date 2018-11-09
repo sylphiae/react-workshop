@@ -1,6 +1,40 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+let contacts = [
+    { id: 1, name: 'Michael Jackson'},
+    { id: 2, name: 'Neil Armstrong'},
+    { id: 3, name: 'Buzz Aldrin'}
+]
+
+// setInterval(() => {
+
+// JSX
+// let div = React.createElement('div');
+// div = <div /> 
+
+function ContactList() {
+let element = (
+    <ul>
+    {contacts.map(contact => {
+        return <li key = { contact.id }>{contact.name}</li>;
+    })}
+    </ul>
+);
+
+return element;
+}
+
+ReactDOM.render(
+    <ContactList />,
+    document.getElementById("app")
+);
+
+// debugger;
+    // contacts = contacts.reverse();
+// ReactDOM.render(element, document.getElementById("app"));
+// }, 1000)
+
 ////////////////////////////////////////////////////////////////////////////////
 // React elements are plain JavaScript objects created with `createElement`
 // const element = React.createElement("input");

@@ -2,40 +2,81 @@ import "./styles.css";
 
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
-let isOpen = false;
+class ContentToggle extends React.Component {
 
-function handleClick() {
-  isOpen = !isOpen;
-  updateThePage();
-}
+  static propTypes = {
+    summary: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+    onToggle: PropTypes.func
+  }
+  
+  state = { isOpen: false };
 
-function ContentToggle() {
+  handleClick = () => {
+  this.setState({ isOpen: !this.state.isOpen });
+  console.log(this.props.children);
+
+  if (this.props.onToggle) {
+    this.props.onToggle();
+  }
+};
+
+  render() {
   let summaryClassName = "content-toggle-summary";
 
-  if (isOpen) {
+  if (this.state.isOpen) {
     summaryClassName += " content-toggle-summary-open";
   }
 
   return (
     <div className="content-toggle">
-      <button onClick={handleClick} className={summaryClassName}>
-        Tacos
+      <button onClick={this.handleClick} className={summaryClassName}>
+        {this.props.summary}
       </button>
-      {isOpen && (
+      {this.state.isOpen && (
         <div className="content-toggle-details">
-          <p>
-            A taco is a traditional Mexican dish composed of a corn or
-            wheat tortilla folded or rolled around a filling.
-          </p>
+          {this.props.children}
         </div>
       )}
     </div>
   );
 }
+}
+
+class ToggleTracker extends React.Component {
+  state = { numToggles: 0};
+
+  handleToggle = () => {
+    this.setState({ numToggles: this.state.numToggles + 1});
+  };
+
+  render(){
+    return (
+      <div>
+        <p> Number of toggles: {this.state.numToggles} </p>
+      <ContentToggle summary="Tacos" onToggle={this.handleToggle}>
+        <p>
+          A taco is a traditional Mexican dish composed of a corn or
+          wheat tortilla folded or rolled around a filling.
+        </p>
+      </ContentToggle>
+      <ContentToggle summary="Burritos" onToggle={this.handleToggle}>
+      <p> 
+        Burritos are delicious. Kind of like tacos, but bigger.
+      </p>
+      </ContentToggle>
+      </div>
+    )
+  }
+}
 
 function updateThePage() {
-  ReactDOM.render(<ContentToggle />, document.getElementById("app"));
+  ReactDOM.render(
+   <ToggleTracker />, 
+  document.getElementById("app")
+);
 }
 
 updateThePage();

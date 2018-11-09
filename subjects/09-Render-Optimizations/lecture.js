@@ -2,10 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-class TodoItem extends React.Component {
+class TodoItem extends React.PureComponent {
   state = {
     done: false
   };
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // if you return false here, neither this component nor any descendants get updates
+  //   return (
+  //     nextProps.body !== this.props.body ||
+  //     nextState.done !== this.state.done
+  //   )
+  // } 
 
   render() {
     return (

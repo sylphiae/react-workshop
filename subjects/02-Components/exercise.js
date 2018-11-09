@@ -12,6 +12,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 import React from "react";
 import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
 const styles = {};
 
@@ -34,20 +35,40 @@ styles.panel = {
 };
 
 class Tabs extends React.Component {
+  state = { activeIndex: 0 };
+
+  selectTab = index => this.setState({activeIndex: index});
+
   render() {
+    const sportsData = this.props.data;
+    let { activeIndex } = this.state;
+
     return (
       <div className="Tabs">
-        <div className="Tab" style={styles.activeTab}>
-          Active
-        </div>
-        <div className="Tab" style={styles.tab}>
-          Inactive
-        </div>
-        <div className="TabPanel" style={styles.panel}>
-          Panel
-        </div>
-      </div>
+        {sportsData.map((sport, index) => (
+          <div 
+            key = {sport.id}
+            className="Tab" 
+            onClick = {() => this.selectTab(index)}
+            style={index === activeIndex ? styles.activeTab: styles.tab}>
+            {sport.name}
+          </div>
+      ))}
+      <div className="TabPanel" style={styles.panel}>
+        {sportsData[activeIndex].description}
+     </div>
+     </div>
     );
+    // return (
+    //   <div className="Tabs">
+    //     <div className="Tab" style={styles.activeTab}>
+    //       Active
+    //     </div>
+    //     <div className="Tab" style={styles.tab}>
+    //       Inactive
+    //     </div>
+    //   </div>
+    // );
   }
 }
 

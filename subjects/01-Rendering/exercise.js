@@ -17,6 +17,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import sortBy from "sort-by";
 
+let sortByName = require('sort-by'),
+items = [];
+
 const DATA = {
   title: "Menu",
   items: [
@@ -29,9 +32,34 @@ const DATA = {
   ]
 };
 
+const sortedItems = DATA.items.sort(sortByName('name'));
+
 function Menu() {
-  return <div>Open the console, you have failing tests.</div>;
+  return <div>
+    <h1>{DATA.title}</h1>
+    <ul>
+    {DATA.items
+    .filter(item => item.type == "mexican")
+      .map(item => <li key = {item.id}>{item.name}</li>)}
+  </ul>
+  </div>;
 }
+
+// class Menu extends React.Component {
+
+//   state = { activeIndex: 0 };
+
+//   selectDropdown = index
+
+//   return <div>
+//   <h1>{DATA.title}</h1>
+//   <ul>
+//   {DATA.items
+//   .filter(item => item.type == "mexican")
+//     .map(item => <li key = {item.id}>{item.name}</li>)}
+// </ul>
+// </div>;
+// }
 
 ReactDOM.render(<Menu />, document.getElementById("app"));
 

@@ -1,22 +1,93 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
+import React from "react";
+import ReactDOM from "react-dom";
+import { connect, Provider } from "react-redux";
 
-const store = createStore((state = 0, action) => {
-  if (action.type === "INCREMENT") {
-    return state + (action.by || 1);
-  } else {
-    return state;
+// const store = createStore((state = 0, action) => {
+//   if (action.type === "INCREMENT") {
+//     return state + (action.by || 1);
+//   } else {
+//     return state;
+//   }
+// });
+
+// store.subscribe(() => {
+//   console.log(store.getState());
+// });
+
+// actions.js
+const INC="INC";
+
+function countReducer(state = 0, action) {
+  if (action.type === INC) {
+    return state + action.by
   }
+  return state;
+}
+
+const ADD_TODO = "ADD_TODO";
+
+function todosReducer(state = [], action) {
+  if (action.type === ADD_TODO) {
+    return state.contact([action.what])
+  }
+  return state
+}
+
+// store.js
+const reducer = combineReducers({
+  count: countReducer,
+  todos: todosReducer
 });
+
+function reducer(state = {}, action) {
+  if (action.type === INC) {
+    return {
+      ...state,
+      count: (state.count || 0) + action.by
+    }
+  }
+  return state;
+}
+
+const store = createStore(reducer);
 
 store.subscribe(() => {
   console.log(store.getState());
 });
+
+store.dispatch({type: INC, by: 1})
+console.log(store.getState());
 
 store.dispatch({ type: "INCREMENT" });
 store.dispatch({ type: "INCREMENT", by: 5 });
 store.dispatch({ type: "INCREMENT" });
 store.dispatch({ type: "INCREMENT" });
 
+class TodoList extends React.Component {
+  handleSubmit = event => {
+    event.preventDefault();
+  }
+
+  state = {todos: []}
+
+  render() {
+    return (
+<div>
+  <form onSubmit = {this.handleSubmit}>
+  <input type ="text" ref={node => (this.input = node)}/>
+  </form>
+
+  <p>todos:</p>
+  <ul>
+    {this.state.todos.map(todo => (
+      <li> {todo} </li>
+    ))}
+    </ul>
+  </div>
+    )
+  }
+}
 /*
 - Flux is an architecture, not a framework
   - DO NOT START BUILDING STUFF WITH FLUX WHEN YOU'RE FIRST GETTING STARTED WITH REACT

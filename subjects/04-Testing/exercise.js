@@ -14,10 +14,13 @@ import data from "./data";
 import Tabs from "./components/Tabs";
 
 describe("when <Tabs> is rendered", () => {
-  let node;
+  let node, activeTab;
   beforeEach(() => {
     node = document.createElement("div");
     ReactDOM.render(<Tabs data={data} />, node);
+
+    activeTab = document.createElement('div');
+    activeTab.style.borderBottomColor = '#000';
   });
 
   afterEach(() => {
@@ -29,23 +32,55 @@ describe("when <Tabs> is rendered", () => {
     expect(tabs[0].innerText).toEqual(data[0].name);
   });
 
-  it("renders the second tab");
+  it("renders the second tab", () => {
+    const tabs = node.querySelectorAll(".Tab");
+    expect(tabs[1].innerText).toEqual(data[1].name);
+  });
 
-  it("renders the third tab");
+  it("renders the third tab", () => {
+    const tabs = node.querySelectorAll(".Tab");
+    expect(tabs[2].innerText).toEqual(data[2].name);
+  });
 
-  it("activates the first tab");
+  it("activates the first tab", () => {
+    const tabs = node.querySelectorAll(".Tab");
+    expect(tabs[0].style.borderBottomColor).toBe(
+      activeTab.style.borderBottomColor
+    )
+  });
 
-  it("does not activate the second tab");
+  it("does not activate the second tab", () => {
+    const tabs = node.querySelectorAll(".Tab");
+    expect(tabs[0].style.borderBottomColor).toBe(
+      activeTab.style.borderBottomColor
+    )
+    });
 
   describe("after clicking the second tab", () => {
     beforeEach(() => {
       // TODO: simulate a click on the second tab
+      const tabs = node.querySelectorAll(".Tab");
+      Simulate.click(tabs[1])
     });
 
-    it("activates the second tab");
+    it("activates the second tab", () => {
+      const tabs = node.querySelectorAll(".Tab");
+      expect(tabs[1].style.borderBottomColor).toBe(
+        activeTab.style.borderBottomColor
+      )
+    });
 
-    it("deactivates the first tab");
+    it("deactivates the first tab", () => {
+      const tabs = node.querySelectorAll(".Tab");
+      expect(tabs[0].style.borderBottomColor).not.toBe(
+        activeTab.style.borderBottomColor
+      )
+    });
 
-    it("puts the correct content in the panel");
+    it("puts the correct content in the panel", () => {
+      const tabPanel = node.querySelectorAll(".TabPanel");
+      expect(tabPanel).not.toBe(null);
+      expect(tabPanel.innerText).toEqual(data[1].description);
+    });
   });
 });

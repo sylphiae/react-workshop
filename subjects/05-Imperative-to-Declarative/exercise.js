@@ -14,8 +14,33 @@ import "bootstrap/dist/css/bootstrap.min.css";
 class Modal extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    children: PropTypes.node
+    children: PropTypes.node,
+    isOpen: PropTypes.bool.isRequired
   };
+
+  doImperativeWork() {
+    $(this.node).modal(this.props.isOpen ? "show" : "hide");
+  }
+
+  toggle() {
+    if (this.props.isOpen) {
+      this.open();
+    } else {
+      this.close();
+    }
+  }
+
+  componentDidMount() {
+    this.toggle();
+    // if user clicks on overlay this can ensure the close of the parent?
+    $(this.node).on('hidden.bs.collapse.modal', ()=> {
+      if (this.props.onClose) this.props.onClose();
+    })
+  }
+
+  componentDidUpdate() {
+    this.toggle();
+  }
 
   open() {
     $(this.node).modal("show");
@@ -42,12 +67,16 @@ class Modal extends React.Component {
 }
 
 class App extends React.Component {
+  state = {
+    title: "",
+    isOpen: false
+  }
   openModal = () => {
-    this.modal.open();
+    this.setState({isOpen: true})
   };
 
   closeModal = () => {
-    this.modal.close();
+    this.setState({isOpen: false})
   };
 
   render() {
@@ -60,8 +89,9 @@ class App extends React.Component {
         </button>
 
         <Modal
+          onClose = {this.closeModal}
+          isOpen = {this.state.isOpen}
           title="Declarative is better"
-          ref={modal => (this.modal = modal)}
         >
           <p>Calling methods on instances is a FLOW not a STOCK!</p>
           <p>

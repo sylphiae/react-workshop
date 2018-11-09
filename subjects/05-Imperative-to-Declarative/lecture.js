@@ -15,17 +15,58 @@ styles.theremin = {
   display: "inline-block"
 };
 
+class Tone extends React.Component {
+
+   static propTypes = {
+   isPlaying: PropTypes.bool.isRequired,
+   pitch: PropTypes.number.isRequired,
+   volume: PropTypes.number.isRequired
+ }
+
+  doImperativeWork() {
+    const { isPlaying, pitch, volume } = this.props;
+
+    if(isPlaying) {
+      this.oscillator.setPitchBend(pitch);
+      this.oscillator.setVolume(volume);
+      this.oscillator.play();
+    } else {
+      this.oscillator.stop();
+    }
+
+    this.oscillator.setPitchBend(this.props.pitch)
+    this.oscillator.setVolume(this.props.volume)
+  }
+
+  componentDidMount() {
+    this.oscillator = createOscillator();
+    this.doImperativeWork()
+  }
+
+  componentDidUpdate() {
+    this.doImperativeWork();
+  }
+
+  render() {
+    return null
+  }
+}
+
 class App extends React.Component {
+  state = { isPLaying: false, pitch: 0.2, volume: 0.8};
+
   componentDidMount() {
     this.oscillator = createOscillator();
   }
 
   play = () => {
-    this.oscillator.play();
+    // this.oscillator.play();
+    this.setState({ isPLaying: true});
   };
 
   stop = () => {
-    this.oscillator.stop();
+    // this.oscillator.stop();
+    this.setState({ pitch, volume});
   };
 
   changeTone = event => {
@@ -53,6 +94,7 @@ class App extends React.Component {
           onMouseLeave={this.stop}
           onMouseMove={this.changeTone}
         />
+        <Tone isPlaying={this.state.isPlaying} pitch={this.state.pitch} volume={this.state.volume} />
       </div>
     );
   }

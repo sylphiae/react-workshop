@@ -11,6 +11,51 @@ import StatefulContentToggle from "./components/StatefulContentToggle";
 import Tabs from "./components/Tabs";
 import Droppable from "./components/Droppable";
 
+describe("ContentToggle", () => {
+  let node;
+
+  beforeEach(() => {
+    node = document.createElement("div");
+  });
+
+  it("shows it summary inside the button", () => {
+    ReactDOM.render(
+      <ContentToggle summary="Tacos">
+        <p>are the best</p>
+      </ContentToggle>,
+      node
+    );
+
+    let button = node.querySelector("button");
+    expect(button).not.toBe(null);
+    expect(button.innerText).toEqual("Tacos");
+  });
+
+  it("doesn't show its content", () => {
+    ReactDOM.render(
+      <ContentToggle summary="Tacos">
+        <p>are the best</p>
+      </ContentToggle>,
+      node
+    );
+
+    expect(node.innerHTML).not.toMatch(/are the best/);
+  });
+
+  describe("when isOpen=true", () => {
+    it("doesn't show its content", () => {
+      ReactDOM.render(
+        <ContentToggle summary="Tacos" isOpen={true}>
+          <p>are delicious</p>
+        </ContentToggle>,
+        node
+      );
+
+      expect(node.innerHTML).not.toMatch(/are the best/);
+    });
+  });
+});
+
 // describe("ContentToggle", () => {
 //   let node;
 //   beforeEach(() => {
